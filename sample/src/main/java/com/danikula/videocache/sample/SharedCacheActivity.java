@@ -2,16 +2,20 @@ package com.danikula.videocache.sample;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
-import org.androidannotations.annotations.EActivity;
+import com.danikula.videocache.sample.databinding.ActivityMultipleVideosBinding;
 
-@EActivity(R.layout.activity_multiple_videos)
 public class SharedCacheActivity extends FragmentActivity {
+
+    private ActivityMultipleVideosBinding mBinding;
 
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-
+        Log.e("lyd"," onCreate ---5");
+        mBinding = ActivityMultipleVideosBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
         if (state == null) {
             addVideoFragment(Video.ORANGE_1, R.id.videoContainer0);
             addVideoFragment(Video.ORANGE_1, R.id.videoContainer1);
@@ -23,7 +27,7 @@ public class SharedCacheActivity extends FragmentActivity {
     private void addVideoFragment(Video video, int containerViewId) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(containerViewId, VideoFragment.build(video.url))
+                .add(containerViewId, VideoFragment.newInstance(video.url))
                 .commit();
     }
 }

@@ -1,52 +1,77 @@
 package com.danikula.videocache.sample;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.ViewById;
+
+import com.danikula.videocache.sample.databinding.ActivityMenuBinding;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@EActivity(R.layout.activity_menu)
 public class MenuActivity extends FragmentActivity {
 
-    @ViewById ListView listView;
+    private ActivityMenuBinding mBinding;
 
-    @AfterViews
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = ActivityMenuBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
+        mBinding.cleanCacheButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClearCacheButtonClick();
+            }
+        });
+        onViewInjected();
+    }
+
     void onViewInjected() {
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, buildListData());
-        listView.setAdapter(adapter);
+        mBinding.listView.setAdapter(adapter);
+
+        mBinding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onListItemClicked(position);
+            }
+        });
     }
 
     @NonNull
     private List<ListEntry> buildListData() {
         return Arrays.asList(
-                new ListEntry("Single Video", SingleVideoActivity_.class),
-                new ListEntry("Multiple Videos", MultipleVideosActivity_.class),
-                new ListEntry("Video Gallery with pre-caching", VideoGalleryActivity_.class),
-                new ListEntry("Shared Cache", SharedCacheActivity_.class)
+                new ListEntry("Single Video", SingleVideoActivity.class),
+                new ListEntry("Multiple Videos", MultipleVideosActivity.class),
+                new ListEntry("Video Gallery with pre-caching", VideoGalleryActivity.class),
+                new ListEntry("Shared Cache", SharedCacheActivity.class)
         );
     }
 
-    @ItemClick(R.id.listView)
+    private void skip(Class clazz) {
+        Log.e("lyd", " skip " + clazz.getSimpleName() + "  " + clazz.toString());
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+    }
+
     void onListItemClicked(int position) {
-        ListEntry item = (ListEntry) listView.getAdapter().getItem(position);
+        ListEntry item = (ListEntry) mBinding.listView.getAdapter().getItem(position);
         startActivity(new Intent(this, item.activityClass));
     }
 
-    @Click(R.id.cleanCacheButton)
     void onClearCacheButtonClick() {
         try {
 

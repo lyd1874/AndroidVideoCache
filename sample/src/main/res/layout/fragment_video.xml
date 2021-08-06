@@ -2,23 +2,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".VideoActivity">
+    android:layout_height="match_parent">
 
     <VideoView
-        android:id="@+id/videoView"
+        android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ImageView
-        android:id="@+id/cacheStatusImageView"
+        android:id="@+id/cache_status_image_view1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:src="@drawable/ic_cloud_download" />
 
     <SeekBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar1"
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
